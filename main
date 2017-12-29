@@ -38,7 +38,7 @@ module.exports.loop = function () {
             {memory: {role: 'harvester'}});
         low_creeps = true;
     }
-    else if(upgraders.length < 3) {
+    else if(upgraders.length < 4) {
         var newName = 'Upgrader' + Game.time;
         console.log('Spawning new upgrader: ' + newName);
         if (upgraders.length < 2) Game.spawns['Spawn1'].spawnCreep([WORK,CARRY,MOVE], newName,
@@ -86,7 +86,9 @@ module.exports.loop = function () {
             roleUpgrader.run(creep);
         }
         else if(creep.memory.role == 'builder') {
-            if(low_creeps || true)
+            if(Room.energyAvailable < (Room.energyCapacityAvailable/2) || low_creeps)
+                creep.memory.temporary_harvester = 'on';
+            if(creep.memory.temporary_harvester == 'on')
                 roleHarvester.run(creep);
             else roleBuilder.run(creep);
         }
