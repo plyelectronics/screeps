@@ -18,9 +18,9 @@ var roleHarvester = {
             let spawn = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: s => s.structureType == STRUCTURE_SPAWN && s.energy < 300
             });
-            let tower = creep.pos.findClosestByPath(FIND_STRUCTURES, {
-                filter: s => s.structureType == STRUCTURE_TOWER && s.energy < 1000
-            });
+            //let tower = creep.pos.findClosestByPath(FIND_STRUCTURES, {
+            //    filter: s => s.structureType == STRUCTURE_TOWER && s.energy < 1000
+            //});
             let container = creep.pos.findClosestByPath(FIND_STRUCTURES, {
                 filter: s => s.structureType == STRUCTURE_CONTAINER && s.store[RESOURCE_ENERGY] < s.storeCapacity
             });
@@ -51,13 +51,13 @@ var roleHarvester = {
                     }
                 }
             }
-            else if(tower){
-                if(tower!=undefined){
-                    if(creep.transfer(tower, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(tower, {visualizePathStyle: {stroke: '#ffff00'}});
-                    }
-                }
-            }
+            //else if(tower){
+            //    if(tower!=undefined){
+            //        if(creep.transfer(tower, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+            //            creep.moveTo(tower, {visualizePathStyle: {stroke: '#ffff00'}});
+            //        }
+            //    }
+            //}
             else {
                 var targets = creep.room.find(FIND_STRUCTURES, {
                     filter: (structure) => {
@@ -89,8 +89,7 @@ var roleHarvester = {
             }
             else if(harvest_report == ERR_NOT_ENOUGH_RESOURCES) {
                 creep.memory.storing = true;
-	            if(Room.energyAvailable < Room.energyCapacityAvailable)
-	                creep.moveTo(sources[harvest_source_num], {visualizePathStyle: {stroke: '#ffaa00'}});
+	            creep.moveTo(sources[harvest_source_num], {visualizePathStyle: {stroke: '#ffaa00'}});
             }
 	    }
 	}

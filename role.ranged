@@ -1,4 +1,4 @@
-var roleBerserker = {
+var roleRanged = {
 
     /** @param {Creep} creep **/
 run: function(creep) {
@@ -8,7 +8,7 @@ run: function(creep) {
                 filter: s => s.structureType == STRUCTURE_TOWER
             });
         if(closestHostileTower) {
-            if(creep.attack(closestHostileTower) == ERR_NOT_IN_RANGE) {
+            if(creep.rangedAttack(closestHostileTower) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(closestHostileTower);
                 }
         }
@@ -16,15 +16,15 @@ run: function(creep) {
             //Attacking Any Creeps
             var closestHostilecreep = creep.pos.findClosestByRange(FIND_HOSTILE_SPAWNS);
             if(closestHostilecreep) {
-                if(creep.attack(closestHostilecreep) == ERR_NOT_IN_RANGE) {
+                if(creep.rangedAttack(closestHostilecreep) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(closestHostilecreep);
                 }
             }
             else {
                 //Attack SPAWNs
                 var closestHostilespawn = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-                if(closestHostilespawn) {
-                    if(creep.attack(closestHostilespawn) == ERR_NOT_IN_RANGE) {
+                if(closestHostilespawn && false) {
+                    if(creep.rangedAttack(closestHostilespawn) == ERR_NOT_IN_RANGE) {
                         creep.moveTo(closestHostilespawn);
                     }
                 }
@@ -33,7 +33,7 @@ run: function(creep) {
                         filter: s => s.structureType != STRUCTURE_CONTROLLER
                     });
                     if(closestHostilegeneral) {
-                        if(creep.attack(closestHostilegeneral) == ERR_NOT_IN_RANGE) {
+                        if(creep.rangedAttack(closestHostilegeneral) == ERR_NOT_IN_RANGE) {
                             creep.moveTo(closestHostilegeneral);
                         }
                     }
@@ -49,4 +49,4 @@ run: function(creep) {
 
 };
 
-module.exports = roleBerserker;
+module.exports = roleRanged;

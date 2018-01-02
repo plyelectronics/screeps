@@ -48,4 +48,4 @@ var roleUpgrader = {
 	}
 };
 
-module.exports = roleUpgrader;role.upgrader
+module.exports = roleUpgrader;
