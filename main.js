@@ -7,6 +7,7 @@ var roleBerserker = require('role.berserker');
 var roleRanged = require('role.ranged');
 var roleReserves = require('role.troop_hold');
 var settingsProfiler = require('settings.profiler');
+var creep_organizer = require('settings.creep_organizer');
 
 module.exports.loop = function () {
 
@@ -17,7 +18,12 @@ module.exports.loop = function () {
         }
     }
 
-    var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
+
+    //settingsProfiler.room_profile(Game.rooms['E84S27'],0);
+    //settingsProfiler.room_profile(Game.rooms['E83S27'],0);
+    creep_organizer.creep_generator(0);
+
+    /*var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
     console.log('Harvesters: ' + harvesters.length);
 
     var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
@@ -86,7 +92,7 @@ module.exports.loop = function () {
         Game.spawns['Spawn1'].spawnCreep([MOVE,MOVE,MOVE,MOVE,RANGED_ATTACK,MOVE,RANGED_ATTACK,ATTACK], newName,
             {memory: {role: 'ranged'}});
         low_creeps = true;
-    }
+    }*/
 
 
     if(Game.spawns['Spawn1'].spawning) {
@@ -112,14 +118,16 @@ module.exports.loop = function () {
             roleUpgrader.run(creep);
         }
         else if(creep.memory.role == 'builder') {
-            if(Room.energyAvailable < (Room.energyCapacityAvailable/2) || low_creeps)
+            if(Room.energyAvailable < (Room.energyCapacityAvailable))
                 creep.memory.temporary_harvester = 'on';
             if(creep.memory.temporary_harvester == 'on')
                 roleHarvester.run(creep);
-            else roleBuilder.run(creep);
+            else {
+              creep.memory.temporary_harvester = 'on'
+              roleHarvester.run(creep);//roleBuilder.run(creep);
+            }
         }
         else if(creep.memory.role == 'repair_bot') {
-            settingsProfiler.profile(creep);
             roleRepair_Bot.run(creep);
         }
         else if(creep.memory.role == 'berserker') {

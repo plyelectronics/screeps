@@ -46,7 +46,7 @@ var roleRepair_Bot = {
 	    else {
 
 	         var energy_dropped = creep.pos.findClosestByPath(
-            FIND_DROPPED_ENERGY,
+            FIND_DROPPED_RESOURCES,
             1
         );
 
