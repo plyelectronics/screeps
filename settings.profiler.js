@@ -27,9 +27,10 @@ module.exports = {
                 'energy_id' : energy_sources[j].id,
                 'energy_miner_id' : '0',
                 'energy_transport_id' : '0',
-                'energy_container_id' : '0'
+                'energy_container_id' : '0',
+                'energy_road' : false
             }
-            room_survey.room_energy_array.push(energy_source);
+            room_survey.room_energy.push(energy_source);
         }
 
         for(j in mineral_sources) {
@@ -37,9 +38,10 @@ module.exports = {
                 'mineral_id' : mineral_sources[j].id,
                 'mineral_miner_id' : '0',
                 'mineral_transport_id' : '0',
-                'mineral_container_id' : '0'
+                'mineral_container_id' : '0',
+                'mineral_road' : false
             }
-            room_survey.room_mineral_array.push(mineral_sources);
+            room_survey.room_mineral.push(mineral_sources);
         }
 
         if(Memory.room_profile) {

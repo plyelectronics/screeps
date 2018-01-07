@@ -60,7 +60,7 @@ StructureTower.prototype.defend = function () {
             }
             else {
                 var repair_wall_low = this.room.find(FIND_STRUCTURES, {
-            filter: (s) => ( s.hits <= (s.hitsMax * .00001) &&
+            filter: (s) => ( s.hits <= (s.hitsMax * .0001) &&
                 ((s.structureType == STRUCTURE_WALL) ||
                 (s.structureType == STRUCTURE_RAMPART)))
             });
@@ -73,7 +73,7 @@ StructureTower.prototype.defend = function () {
                     }
                     else {
                         var repair_wall = this.room.find(FIND_STRUCTURES, {
-                    filter: (s) => (s.hits <= (s.hitsMax * 0.0005)) &&
+                    filter: (s) => (s.hits <= (s.hitsMax * 0.01)) &&
                     ((s.structureType == STRUCTURE_WALL) ||
                     (s.structureType == STRUCTURE_RAMPART))
                 });

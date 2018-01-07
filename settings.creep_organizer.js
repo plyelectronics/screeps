@@ -12,7 +12,7 @@ module.exports = {
       for(var name in Memory.creeps) {
           if(!Game.creeps[name]) {
               if(Memory.creeps[name].role == "energy_miner") {
-                var room_name = Memory.creeps[name].room.name;
+                var room_name = Memory.creeps[name].assigned_room;
                 var room_index = Memory.room_profile ? Memory.room_profile.findIndex(function(find_room){return find_room.room_id == room_name}) : undefined;
                 if( room_index != undefined ) {
                   var energy_index = Memory.room_profile[room_index].room_energy.findIndex(function(find_energy_obj){ return find_energy_obj.energy_miner_id == Memory.creeps[name].id});
@@ -22,17 +22,20 @@ module.exports = {
                 }
               }
               else if(Memory.creeps[name].role == "energy_transport") {
-                var room_name = Memory.creeps[name].room.name;
+                var room_name = Memory.creeps[name].assigned_room;
+                console.log('Deleted transport came from room: ' + room_name);
                 var room_index = Memory.room_profile ? Memory.room_profile.findIndex(function(find_room){return find_room.room_id == room_name}) : undefined;
+                console.log('Deleted transport room index: ' + room_index);
                 if( room_index != undefined ) {
                   var energy_index = Memory.room_profile[room_index].room_energy.findIndex(function(find_energy_obj){ return find_energy_obj.energy_transport_id == Memory.creeps[name].id});
+                  console.log('Deleted transport energy index: ' + energy_index);
                   if( energy_index != undefined ) {
                     Memory.room_profile[room_index].room_energy[energy_index].energy_transport_id == '0';
                   }
                 }
               }
               else if(Memory.creeps[name].role == "extractor") {
-                var room_name = Memory.creeps[name].room.name;
+                var room_name = Memory.creeps[name].assigned_room;
                 var room_index = Memory.room_profile ? Memory.room_profile.findIndex(function(find_room){return find_room.room_id == room_name}) : undefined;
                 if( room_index != undefined ) {
                   var mineral_index = Memory.room_profile[room_index].room_energy.findIndex(function(find_mineral_obj){ return find_mineral_obj.mineral_miner_id == Memory.creeps[name].id});
@@ -42,7 +45,7 @@ module.exports = {
                 }
               }
               else if(Memory.creeps[name].role == "mineral_transport") {
-                var room_name = Memory.creeps[name].room.name;
+                var room_name = Memory.creeps[name].assigned_room;
                 var room_index = Memory.room_profile ? Memory.room_profile.findIndex(function(find_room){return find_room.room_id == room_name}) : undefined;
                 if( room_index != undefined ) {
                   var mineral_index = Memory.room_profile[room_index].room_energy.findIndex(function(find_mineral_obj){ return find_mineral_obj.mineral_transport_id == Memory.creeps[name].id});
@@ -68,22 +71,22 @@ module.exports = {
 
           var available_spawns = Memory.base_profile[i].base_spawn.filter(function(tmp_spawn_array){ return tmp_spawn_array.spawn_available == true});
           var num_scheduled = 0;
-          var room_memory = Memory.room_profile.filter(function(find_room){return find_room.room_home_base == Memory.base_profile[i].base_index});
-          for(j = 0; ((j < room_memory.length) && (available_spawns.length != num_scheduled)); j++) {
+          var room_memory = Memory.room_profile ? Memory.room_profile.filter(function(find_room){return find_room.room_home_base == Memory.base_profile[i].base_index}) : [];
+          for(j = 0; (j < (room_memory ? room_memory.length : 0) && (available_spawns.length != num_scheduled)); j++) {
             //console.log('Looking to make some creeps for room : ' + room_memory[j].room_id);
-            var room_index = Memory.room_profile.findIndex(function(find_room){return find_room.room_id == room_memory.room_id});
-            //for(k in room_memory[j].room_energy) {
-            //  if(energy_miner_id == '0') role_creator.build_energy_miner(i, room_index, k, available_spawns[num_scheduled++].base_spawn.spawn_id);
-            //  else if(energy_transport_id == '0') role_creator.build_energy_transport(i, room_index, k, available_spawns[num_scheduled++].base_spawn.spawn_id);
-            //}
-            //if(num_scheduled == available_spawns.length) break;
-            //if(room_memory.room_level >= 4) {
-            //  for(k in room_memory[j].room_mineral) {
-            //    if(mineral_miner_id == '0') role_creator.build_extractor(i, room_index, k, available_spawns[num_scheduled++].base_spawn.spawn_id);
-            //    else if(mineral_transport_id == '0') role_creator.build_mineral_transport(i, room_index, k, available_spawns[num_scheduled++].base_spawn.spawn_id);
-            //  }
-            //}
-            //if(num_scheduled == available_spawns.length) break;
+            var room_index = Memory.room_profile.findIndex(function(find_room){return find_room.room_id == room_memory[j].room_id});
+            for(k in room_memory[j].room_energy) {
+              if(room_memory[j].room_energy[k].energy_miner_id == '0') role_creator.build_energy_miner(i, room_index, k, available_spawns[num_scheduled++].spawn_id);
+              else if(room_memory[j].room_energy[k].energy_transport_id == '0') role_creator.build_energy_transport(i, room_index, k, available_spawns[num_scheduled++].spawn_id);
+              if(num_scheduled == available_spawns.length) break;
+            }
+            if(room_memory.room_level >= 5 && false) {
+              for(k in room_memory[j].room_mineral) {
+                if(room_memory[j].room_mineral[k].mineral_miner_id == '0') role_creator.build_extractor(i, room_index, k, available_spawns[num_scheduled++].spawn_id);
+                else if(room_memory[j].room_mineral[k].mineral_transport_id == '0') role_creator.build_mineral_transport(i, room_index, k, available_spawns[num_scheduled++].spawn_id);
+                if(num_scheduled == available_spawns.length) break;
+              }
+            }
             if(room_memory[j].room_purpose == 'base') {
               var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
               var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
@@ -95,16 +98,18 @@ module.exports = {
               //console.log('Builders: ' + builders.length);
               //console.log('Repair Bot: ' + repair_bots.length);
 
-              if(harvesters.length < 3) {
+              if(harvesters.length < 1) {
                   var newName = 'Harvester' + Game.time;
                   console.log('Spawning new harvester: ' + newName);
                   //this part would go
-                  var spawn_obj = Game.getObjectById(Memory.base_profile[i].base_spawn[num_scheduled]);
-                  if (harvesters.length == 0) Game.spawns['Spawn1'].spawnCreep([WORK,CARRY,MOVE], newName,
-                      {memory: {role: 'harvester'}});
-                  else if (harvesters.length == 1) Game.spawns['Spawn1'].spawnCreep([WORK,CARRY,CARRY,MOVE], newName,
-                      {memory: {role: 'harvester'}});
-                  else Game.spawns['Spawn1'].spawnCreep([WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE], newName,
+                  //var spawn_obj = Game.getObjectById(Memory.base_profile[i].base_spawn[num_scheduled]);
+                  //if (harvesters.length == 0) Game.spawns['Spawn1'].spawnCreep([WORK,CARRY,MOVE], newName,
+                  //    {memory: {role: 'harvester'}});
+                  //else if (harvesters.length == 1) Game.spawns['Spawn1'].spawnCreep([WORK,CARRY,CARRY,MOVE], newName,
+                  //    {memory: {role: 'harvester'}});
+                  //else Game.spawns['Spawn1'].spawnCreep([WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE], newName,
+                  //    {memory: {role: 'harvester'}});
+                  Game.spawns['Spawn1'].spawnCreep([WORK,WORK,CARRY,CARRY,MOVE,MOVE], newName,
                       {memory: {role: 'harvester'}});
               }
               else if(upgraders.length < 2) {
@@ -115,7 +120,7 @@ module.exports = {
                   else Game.spawns['Spawn1'].spawnCreep([WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,ATTACK], newName,
                       {memory: {role: 'upgrader'}});
               }
-              else if(builders.length < 3) {
+              else if(builders.length < 2) {
                   var newName = 'Builder' + Game.time;
                   console.log('Spawning new builder: ' + newName);
                   Game.spawns['Spawn1'].spawnCreep([WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE], newName,

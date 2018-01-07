@@ -8,19 +8,22 @@ var roleRanged = require('role.ranged');
 var roleReserves = require('role.troop_hold');
 var settingsProfiler = require('settings.profiler');
 var creep_organizer = require('settings.creep_organizer');
+var roleEMiner = require('role.energy_miner');
+var roleETransport = require('role.energy_transport');
 
 module.exports.loop = function () {
 
-    for(var name in Memory.creeps) {
-        if(!Game.creeps[name]) {
-            delete Memory.creeps[name];
-            console.log('Clearing non-existing creep memory:', name);
-        }
-    }
+    //for(var name in Memory.creeps) {
+    //    if(!Game.creeps[name]) {
+    //        delete Memory.creeps[name];
+    //        console.log('Clearing non-existing creep memory:', name);
+    //    }
+    //}
 
 
     //settingsProfiler.room_profile(Game.rooms['E84S27'],0);
     //settingsProfiler.room_profile(Game.rooms['E83S27'],0);
+    creep_organizer.creep_cleanup();
     creep_organizer.creep_generator(0);
 
     /*var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
@@ -114,18 +117,17 @@ module.exports.loop = function () {
         if(creep.memory.role == 'harvester') {
             roleHarvester.run(creep);
         }
+        else if(creep.memory.role == 'energy_miner') {
+            roleEMiner.run(creep);
+        }
+        else if(creep.memory.role == 'energy_transport') {
+            roleETransport.run(creep);
+        }
         else if(creep.memory.role == 'upgrader') {
             roleUpgrader.run(creep);
         }
         else if(creep.memory.role == 'builder') {
-            if(Room.energyAvailable < (Room.energyCapacityAvailable))
-                creep.memory.temporary_harvester = 'on';
-            if(creep.memory.temporary_harvester == 'on')
-                roleHarvester.run(creep);
-            else {
-              creep.memory.temporary_harvester = 'on'
-              roleHarvester.run(creep);//roleBuilder.run(creep);
-            }
+              roleBuilder.run(creep);
         }
         else if(creep.memory.role == 'repair_bot') {
             roleRepair_Bot.run(creep);
