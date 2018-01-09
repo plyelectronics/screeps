@@ -11,49 +11,6 @@ module.exports = {
     creep_cleanup(){
       for(var name in Memory.creeps) {
           if(!Game.creeps[name]) {
-              if(Memory.creeps[name].role == "energy_miner") {
-                var room_name = Memory.creeps[name].assigned_room;
-                var room_index = Memory.room_profile ? Memory.room_profile.findIndex(function(find_room){return find_room.room_id == room_name}) : undefined;
-                if( room_index != undefined ) {
-                  var energy_index = Memory.room_profile[room_index].room_energy.findIndex(function(find_energy_obj){ return find_energy_obj.energy_miner_id == Memory.creeps[name].id});
-                  if( energy_index != undefined ) {
-                    Memory.room_profile[room_index].room_energy[energy_index].energy_miner_id == '0';
-                  }
-                }
-              }
-              else if(Memory.creeps[name].role == "energy_transport") {
-                var room_name = Memory.creeps[name].assigned_room;
-                console.log('Deleted transport came from room: ' + room_name);
-                var room_index = Memory.room_profile ? Memory.room_profile.findIndex(function(find_room){return find_room.room_id == room_name}) : undefined;
-                console.log('Deleted transport room index: ' + room_index);
-                if( room_index != undefined ) {
-                  var energy_index = Memory.room_profile[room_index].room_energy.findIndex(function(find_energy_obj){ return find_energy_obj.energy_transport_id == Memory.creeps[name].id});
-                  console.log('Deleted transport energy index: ' + energy_index);
-                  if( energy_index != undefined ) {
-                    Memory.room_profile[room_index].room_energy[energy_index].energy_transport_id == '0';
-                  }
-                }
-              }
-              else if(Memory.creeps[name].role == "extractor") {
-                var room_name = Memory.creeps[name].assigned_room;
-                var room_index = Memory.room_profile ? Memory.room_profile.findIndex(function(find_room){return find_room.room_id == room_name}) : undefined;
-                if( room_index != undefined ) {
-                  var mineral_index = Memory.room_profile[room_index].room_energy.findIndex(function(find_mineral_obj){ return find_mineral_obj.mineral_miner_id == Memory.creeps[name].id});
-                  if( mineral_index != undefined ) {
-                    Memory.room_profile[room_index].room_mineral[mineral_index].mineral_miner_id == '0';
-                  }
-                }
-              }
-              else if(Memory.creeps[name].role == "mineral_transport") {
-                var room_name = Memory.creeps[name].assigned_room;
-                var room_index = Memory.room_profile ? Memory.room_profile.findIndex(function(find_room){return find_room.room_id == room_name}) : undefined;
-                if( room_index != undefined ) {
-                  var mineral_index = Memory.room_profile[room_index].room_energy.findIndex(function(find_mineral_obj){ return find_mineral_obj.mineral_transport_id == Memory.creeps[name].id});
-                  if( mineral_index != undefined ) {
-                    Memory.room_profile[room_index].room_mineral[mineral_index].mineral_transport_id == '0';
-                  }
-                }
-              }
               delete Memory.creeps[name];
               console.log('Clearing non-existing creep memory:', name);
           }
@@ -73,11 +30,12 @@ module.exports = {
           var num_scheduled = 0;
           var room_memory = Memory.room_profile ? Memory.room_profile.filter(function(find_room){return find_room.room_home_base == Memory.base_profile[i].base_index}) : [];
           for(j = 0; (j < (room_memory ? room_memory.length : 0) && (available_spawns.length != num_scheduled)); j++) {
-            //console.log('Looking to make some creeps for room : ' + room_memory[j].room_id);
             var room_index = Memory.room_profile.findIndex(function(find_room){return find_room.room_id == room_memory[j].room_id});
             for(k in room_memory[j].room_energy) {
-              if(room_memory[j].room_energy[k].energy_miner_id == '0') role_creator.build_energy_miner(i, room_index, k, available_spawns[num_scheduled++].spawn_id);
-              else if(room_memory[j].room_energy[k].energy_transport_id == '0') role_creator.build_energy_transport(i, room_index, k, available_spawns[num_scheduled++].spawn_id);
+                var miner_found = _.filter(Game.creeps, (creep => ((creep.memory.role == 'energy_miner')  && (creep.memory.resource_id == room_memory[j].room_energy[k].energy_id))));
+                var transport_found = _.filter(Game.creeps, (creep => ((creep.memory.role == 'energy_transport')  && (creep.memory.resource_id == room_memory[j].room_energy[k].energy_id))));
+              if(miner_found.length < 1) role_creator.build_energy_miner(i, room_index, k, available_spawns[num_scheduled++].spawn_id);
+              else if(transport_found.length < 1) role_creator.build_energy_transport(i, room_index, k, available_spawns[num_scheduled++].spawn_id);
               if(num_scheduled == available_spawns.length) break;
             }
             if(room_memory.room_level >= 5 && false) {
@@ -98,7 +56,7 @@ module.exports = {
               //console.log('Builders: ' + builders.length);
               //console.log('Repair Bot: ' + repair_bots.length);
 
-              if(harvesters.length < 1) {
+              if(harvesters.length < 1 && false) {
                   var newName = 'Harvester' + Game.time;
                   console.log('Spawning new harvester: ' + newName);
                   //this part would go
@@ -137,7 +95,6 @@ module.exports = {
           }
         }
 
-        console.log('going to make some creeps');
         // check miners
         // check runners
         // check builders

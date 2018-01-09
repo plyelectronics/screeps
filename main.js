@@ -13,90 +13,10 @@ var roleETransport = require('role.energy_transport');
 
 module.exports.loop = function () {
 
-    //for(var name in Memory.creeps) {
-    //    if(!Game.creeps[name]) {
-    //        delete Memory.creeps[name];
-    //        console.log('Clearing non-existing creep memory:', name);
-    //    }
-    //}
-
-
     //settingsProfiler.room_profile(Game.rooms['E84S27'],0);
     //settingsProfiler.room_profile(Game.rooms['E83S27'],0);
     creep_organizer.creep_cleanup();
     creep_organizer.creep_generator(0);
-
-    /*var harvesters = _.filter(Game.creeps, (creep) => creep.memory.role == 'harvester');
-    console.log('Harvesters: ' + harvesters.length);
-
-    var upgraders = _.filter(Game.creeps, (creep) => creep.memory.role == 'upgrader');
-    console.log('Upgraders: ' + upgraders.length);
-
-    var builders = _.filter(Game.creeps, (creep) => creep.memory.role == 'builder');
-    console.log('Builders: ' + builders.length);
-
-    var repair_bots = _.filter(Game.creeps, (creep) => creep.memory.role == 'repair_bot');
-    console.log('Repair Bot: ' + repair_bots.length);
-
-    var berserkers = _.filter(Game.creeps, (creep) => creep.memory.role == 'berserker');
-    console.log('Berserkers: ' + berserkers.length);
-
-    var rangers = _.filter(Game.creeps, (creep) => creep.memory.role == 'ranged');
-    console.log('Rangers: ' + rangers.length);
-
-    var hostiles = Game.rooms['E84S27'].find(FIND_HOSTILE_CREEPS);
-
-    var low_creeps = false;
-
-    if(harvesters.length < 3) {
-        var newName = 'Harvester' + Game.time;
-        console.log('Spawning new harvester: ' + newName);
-        if (harvesters.length == 0) Game.spawns['Spawn1'].spawnCreep([WORK,CARRY,MOVE], newName,
-            {memory: {role: 'harvester'}});
-        else if (harvesters.length == 1) Game.spawns['Spawn1'].spawnCreep([WORK,CARRY,CARRY,MOVE], newName,
-            {memory: {role: 'harvester'}});
-        else Game.spawns['Spawn1'].spawnCreep([WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE,MOVE], newName,
-            {memory: {role: 'harvester'}});
-        low_creeps = true;
-    }
-    else if(upgraders.length < 2) {
-        var newName = 'Upgrader' + Game.time;
-        console.log('Spawning new upgrader: ' + newName);
-        if (upgraders.length < 2) Game.spawns['Spawn1'].spawnCreep([WORK,CARRY,MOVE], newName,
-            {memory: {role: 'upgrader'}});
-        else Game.spawns['Spawn1'].spawnCreep([WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,ATTACK], newName,
-            {memory: {role: 'upgrader'}});
-        low_creeps = true;
-    }
-    else if(builders.length < 3) {
-        var newName = 'Builder' + Game.time;
-        console.log('Spawning new builder: ' + newName);
-        Game.spawns['Spawn1'].spawnCreep([WORK,WORK,WORK,WORK,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE], newName,
-            {memory: {role: 'builder'}});
-        low_creeps = true;
-    }
-    else if(repair_bots.length < 2) {
-        var newName = 'Repair_Bot' + Game.time;
-        console.log('Spawning new repair_bot: ' + newName);
-        Game.spawns['Spawn1'].spawnCreep([WORK,WORK,CARRY,CARRY,CARRY,CARRY,MOVE,MOVE,MOVE], newName,
-            {memory: {role: 'repair_bot'}});
-        low_creeps = true;
-    }
-    else if((berserkers.length < 8) && (hostiles.length > 0)) {
-        var newName = 'Berserker' + Game.time;
-        console.log('Spawning new berserker: ' + newName);
-        Game.spawns['Spawn1'].spawnCreep([MOVE,MOVE,MOVE,ATTACK,MOVE,ATTACK,MOVE,ATTACK,MOVE,ATTACK], newName,
-            {memory: {role: 'berserker'}});
-        low_creeps = true;
-    }
-    else if((rangers.length < 5) && (hostiles.length > 0)) {
-        var newName = 'Ranger' + Game.time;
-        console.log('Spawning new ranger: ' + newName);
-        Game.spawns['Spawn1'].spawnCreep([MOVE,MOVE,MOVE,MOVE,RANGED_ATTACK,MOVE,RANGED_ATTACK,ATTACK], newName,
-            {memory: {role: 'ranged'}});
-        low_creeps = true;
-    }*/
-
 
     if(Game.spawns['Spawn1'].spawning) {
         var spawningCreep = Game.creeps[Game.spawns['Spawn1'].spawning.name];

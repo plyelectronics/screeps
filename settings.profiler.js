@@ -25,9 +25,9 @@ module.exports = {
         for(j in energy_sources) {
             var energy_source = {
                 'energy_id' : energy_sources[j].id,
-                'energy_miner_id' : '0',
-                'energy_transport_id' : '0',
-                'energy_container_id' : '0',
+                'energy_miner_id' : 'na',
+                'energy_transport_id' : 'na',
+                'energy_container_id' : 'na',
                 'energy_road' : false
             }
             room_survey.room_energy.push(energy_source);
@@ -36,9 +36,9 @@ module.exports = {
         for(j in mineral_sources) {
             var mineral_sources = {
                 'mineral_id' : mineral_sources[j].id,
-                'mineral_miner_id' : '0',
-                'mineral_transport_id' : '0',
-                'mineral_container_id' : '0',
+                'mineral_miner_id' : 'na',
+                'mineral_transport_id' : 'na',
+                'mineral_container_id' : 'na',
                 'mineral_road' : false
             }
             room_survey.room_mineral.push(mineral_sources);
