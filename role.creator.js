@@ -32,11 +32,19 @@ module.exports = {
       }
     }
 
+    var creep_name = 'energy_miner';
+    var creeps_in_base = _.filter(Game.creeps, (creep) => creep.memory.base_room == Memory.base_profile[base_index].base_id);
+    if(creeps_in_base < 2) {
+      console.log('In Base ' + Memory.base_profile[base_index].base_id + ' there are only ' + creeps_in_base.length + ' creeps. Making Harvester.');
+      creep_name = 'harvester';
+    }
+
     if(spawn.spawnCreep(body, newName,
         {memory: {
-          role: 'energy_miner',
+          role: creep_name,
           assigned_room: Memory.room_profile[room_index].room_id,
           resource_id: Memory.room_profile[room_index].room_energy[energy_index].energy_id,
+          base_room: Memory.base_profile[base_index].base_id,
           setup: false
         }}) == OK) {
           return false;
@@ -79,6 +87,7 @@ module.exports = {
           role: 'energy_transport',
           assigned_room: Memory.room_profile[room_index].room_id,
           ferry_room: Memory.base_profile[Memory.room_profile[room_index].room_home_base].base_id,
+          base_room: Memory.base_profile[Memory.room_profile[room_index].room_home_base].base_id,
           resource_id: Memory.room_profile[room_index].room_energy[energy_index].energy_id,
           miner_id: Memory.room_profile[room_index].room_energy[energy_index].energy_miner_id,
           container_id: Memory.room_profile[room_index].room_energy[energy_index].energy_container_id,

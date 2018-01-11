@@ -100,6 +100,7 @@ function moveTo_w_road_fix (creep, target) {
     var target_road = creep.pos.lookFor(LOOK_STRUCTURES);
     if(const_road.length > 0) {
       creep.build(const_road[0]);
+      return;
     }
     else if((target_road.length > 0 ?
       ((target_road[0].structureType == STRUCTURE_ROAD) && (target_road[0].hits < (target_road[0].hitsMax * .40))) :
@@ -108,6 +109,11 @@ function moveTo_w_road_fix (creep, target) {
 
       creep.memory.repair_road_flag = true;
       creep.memory.repair_road_id = target_road[0].id;
+      return;
+    }
+    else if((target_road.length == 0) && (const_road.length == 0)) {
+      creep.pos.createConstructionSite(STRUCTURE_ROAD);
+      return;
     }
     else {
         creep.moveTo(target);

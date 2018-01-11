@@ -46,20 +46,8 @@ module.exports.loop = function () {
         else if(creep.memory.role == 'upgrader') {
             roleUpgrader.run(creep);
         }
-        else if(creep.memory.role == 'builder') {
-              roleBuilder.run(creep);
-        }
         else if(creep.memory.role == 'repair_bot') {
             roleRepair_Bot.run(creep);
-        }
-        else if(creep.memory.role == 'berserker') {
-            //if (berserkers.length >= 4) {
-                roleBerserker.run(creep);
-            //}
-            //else roleReserves.reserves(creep);
-        }
-        else if(creep.memory.role == 'ranged') {
-            roleRanged.run(creep);
         }
     }
 

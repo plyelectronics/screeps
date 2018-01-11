@@ -52,11 +52,9 @@ var roleHarvester = {
     run: function(creep) {
         if(creep.memory.storing && (_.sum(creep.carry) == 0)) {
             creep.memory.storing = false;
-            //creep.say('🔄 Harvesting');
 	    }
 	    if(!creep.memory.storing &&  (_.sum(creep.carry) == creep.carryCapacity)) {
 	        creep.memory.storing = true;
-	        //creep.say('🔄 Storing Energy');
 	    }
 
 	    if(creep.memory.storing) {
@@ -116,17 +114,12 @@ var roleHarvester = {
                 }
                 else {
                     creep.memory.storing = false;
-                    if(creep.memory.role == 'builder')
-                       creep.memory.temporary_harvester = 'off';
                 }
             }
 	    }
 	    else {
 	        var sources = creep.room.find(FIND_SOURCES);
-            var harvest_source_num = 1;
-            if(creep.memory.role == 'builder') harvest_source_num = 0;
-
-            var harvest_report = creep.harvest(sources[harvest_source_num]);
+            var harvest_report = creep.harvest(0);
             if(harvest_report == ERR_NOT_IN_RANGE) {
                 creep.moveTo(sources[harvest_source_num]);
             }
