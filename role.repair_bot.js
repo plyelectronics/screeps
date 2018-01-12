@@ -80,7 +80,7 @@ var roleRepair_Bot = {
     }
     else {
         var energy_dropped = creep.pos.findClosestByRange(FIND_DROPPED_RESOURCES,1);
-        if (energy_dropped) {
+        if (energy_dropped && (!Memory.room_profile[room_index].room_hostiles)) {
           if(creep.pickup(energy_dropped) == ERR_NOT_IN_RANGE) {
              creep.moveTo(energy_dropped);
            }

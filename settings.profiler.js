@@ -10,6 +10,7 @@ module.exports = {
 
         var energy_sources = room.find(FIND_SOURCES);
         var mineral_sources = room.find(FIND_MINERALS);
+        var HostileCreeps = creep.pos.find(FIND_HOSTILE_CREEPS);
 
         var room_survey = {
             'room_id' : room.name,
@@ -20,6 +21,7 @@ module.exports = {
             'room_purpose' : Memory.base_profile ? (Memory.base_profile[base_num].base_id == room.name ? 'base' : 'default') : 'default',
             'room_home_base' : base_num,
             'room_action' : Memory.base_profile ? (Memory.base_profile[base_num].base_id == room.name ? 'base' : 'default') : 'default'
+            'room_hostiles' : (HostileCreeps.length > 0) ? true : false;
         }
 
         for(j in energy_sources) {

@@ -3,14 +3,14 @@ var roleUpgrader = {
     /** @param {Creep} creep **/
     run: function(creep) {
 
-      var closestHostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
-      if(closestHostile && (creep.memory.role == 'upgrader')) {
-          creep.say('🔪 Attack')
-          if(creep.attack(closestHostile) == ERR_NOT_IN_RANGE) {
-              creep.moveTo(closestHostile, {visualizePathStyle: {stroke: '#ff0000'}});
-          }
-      }
-      else {
+      //var closestHostile = creep.pos.findClosestByRange(FIND_HOSTILE_CREEPS);
+      //if(closestHostile && (creep.memory.role == 'upgrader')) {
+      //    creep.say('🔪 Attack')
+      //    if(creep.attack(closestHostile) == ERR_NOT_IN_RANGE) {
+      //        creep.moveTo(closestHostile, {visualizePathStyle: {stroke: '#ff0000'}});
+      //    }
+      //}
+      //else {
 
           if(creep.memory.upgrading && creep.carry.energy == 0) {
               creep.memory.upgrading = false;
@@ -21,7 +21,7 @@ var roleUpgrader = {
 
         if(creep.memory.upgrading) {
               if(creep.upgradeController(creep.room.controller) == ERR_NOT_IN_RANGE) {
-                  creep.moveTo(creep.room.controller, {visualizePathStyle: {stroke: '#ffffff'}});
+                  creep.moveTo(creep.room.controller);
               }
           }
           else {
@@ -31,7 +31,7 @@ var roleUpgrader = {
               if(storage_cont){
                   if(storage_cont!=undefined){
                       if(creep.withdraw(storage_cont, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                          creep.moveTo(storage_cont, {visualizePathStyle: {stroke: '#ffff00'}});
+                          creep.moveTo(storage_cont);
                       }
                   }
               }
@@ -42,13 +42,13 @@ var roleUpgrader = {
                   if(container){
                       if(container!=undefined){
                           if(creep.withdraw(container, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                              creep.moveTo(container, {visualizePathStyle: {stroke: '#ffff00'}});
+                              creep.moveTo(container);
                           }
                       }
                   }
               }
           }
-      }
+      //}
 	}
 };
 

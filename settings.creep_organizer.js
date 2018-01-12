@@ -33,6 +33,13 @@ module.exports = {
           for(j = 0; (j < (room_memory ? room_memory.length : 0) && (available_spawns.length != num_scheduled)); j++) {
             var room_index = Memory.room_profile.findIndex(function(find_room){return find_room.room_id == room_memory[j].room_id});
 
+            if((room_index != undefined) && (Game.rooms[Memory.room_profile[room_index] != undefined))
+              var hostiles = Game.rooms[Memory.room_profile[room_index].room_id].find(FIND_HOSTILE_CREEPS);
+              if(hostiles.length > 0)
+                Memory.room_profile[room_index].room_hostiles = true;
+              else
+                Memory.room_profile[room_index].room_hostiles = false;
+
             //For Building Mining/Support for Mining Bots
             if((room_memory[j].room_purpose == 'base') || (room_memory[j].room_purpose == 'remote_mining')){
               for(k in room_memory[j].room_energy) {
