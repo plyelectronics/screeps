@@ -3,6 +3,7 @@ module.exports = {
     var room_index = Memory.room_profile.findIndex(function(find_room){return find_room.room_id == creep.memory.assigned_room});
     var energy_index = Memory.room_profile[room_index].room_energy.findIndex(function(find_energy){return find_energy.energy_id == creep.memory.resource_id});
     var source = Game.getObjectById(creep.memory.resource_id);
+    var base_room = Game.rooms[Memory.base_profile[Memory.room_profile[room_index].room_home_base].base_id];
 
     if(!creep.memory.setup) {
       Memory.room_profile[room_index].room_energy[energy_index].energy_miner_id = creep.id;
@@ -43,6 +44,31 @@ module.exports = {
         }
       }
     }
+
+    //if creep body cost < 300
+    //current
+    var creep_total_body_cost = 0;
+    for(i = 0; i < creep.body.length; i++) {
+      creep_total_body_cost += BODYPART_COST[creep.body[i].type];
+    }
+
+    if(creep_total_body_cost == 0) {
+      console.log('Miner: BodyPart_Cost is not being calculated correctly!!!!');
+    }
+    if(Memory.room_profile[room_index].room_purpose == 'base') {
+      if((creep_total_body_cost <= 1000)  && ((base_room.energyAvailable - 200) > creep_total_body_cost))
+        creep.suicide();
+    }
+    else if(Memory.room_profile[room_index].room_energy[energy_index].energy_road) {
+      if((creep_total_body_cost <= 1100)  && ((base_room.energyAvailable - 500) > creep_total_body_cost))
+        creep.suicide();
+    }
+    else {
+      if((creep_total_body_cost <= 1100)  && ((base_room.energyAvailable - 300) > creep_total_body_cost))
+        creep.suicide();
+    }
+
+
 
     var container = (creep.memory.container_id != undefined) ?
       Game.getObjectById(creep.memory.container_id) : undefined;

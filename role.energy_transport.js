@@ -208,7 +208,7 @@ module.exports = {
         }
         return;
       }
-      else if(creep.room.energyAvailable < creep.room.energyCapacityAvailable) {
+      else if(creep.room.energyAvailable < (creep.room.energyCapacityAvailable * .95)) {
         let extension = creep.pos.findClosestByRange(FIND_STRUCTURES, {
           filter: s => ((s.structureType == STRUCTURE_EXTENSION) && (s.energy != 50))
         });
@@ -268,8 +268,8 @@ module.exports = {
           }
         }
         else {
-          if((creep.memory.assigned_room == Memory.base_profile[Memory.room_profile[room_index].room_home_base].base_id) &&
-            (source.energy == 0) && (creep.room.energyAvailable < creep.room.energyCapacityAvailable))
+          if((creep.memory.assigned_room == Memory.base_profile[Memory.room_profile[room_index].room_home_base].base_id)
+            && (creep.room.energyAvailable < creep.room.energyCapacityAvailable))
           {
             for(i in creep.memory.storage_targets) {
               var storage = Game.getObjectById(creep.memory.storage_targets[i]);

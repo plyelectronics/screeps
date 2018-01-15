@@ -69,18 +69,18 @@ StructureTower.prototype.defend = function () {
                     console.log('very low rampart...');
                     var towers = this.room.find(
                         FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-                        towers.forEach(tower => tower.repair(repair_wall_low[0]));
-                    }
-                    else {
-                        var repair_wall = this.room.find(FIND_STRUCTURES, {
-                    filter: (s) => (s.hits <= (s.hitsMax * 0.01)) &&
-                    ((s.structureType == STRUCTURE_WALL) ||
-                    (s.structureType == STRUCTURE_RAMPART))
-                });
+                    towers.forEach(tower => tower.repair(repair_wall_low[0]));
+                }
+                else {
+                    var repair_wall = this.room.find(FIND_STRUCTURES, {
+                        filter: (s) => (s.hits <= (s.hitsMax * 0.01)) &&
+                        ((s.structureType == STRUCTURE_WALL) ||
+                        (s.structureType == STRUCTURE_RAMPART))
+                    });
 
-                if(repair_wall.length > 0){
-                    var towers = this.room.find(
-                        FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
+                    if(repair_wall.length > 0){
+                        var towers = this.room.find(
+                            FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
                         towers.forEach(tower => tower.repair(repair_wall[0]));
                     }
                 }

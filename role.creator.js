@@ -16,18 +16,18 @@ module.exports = {
       }
     }
     else if (Memory.room_profile[room_index].room_energy[energy_index].energy_road) {
-      if(energy_available < 700) return true;
-      body.push(MOVE, MOVE, WORK, WORK, WORK, WORK);
-      var num_interations = (energy_available - 700)/250;
+      if(energy_available < 900) return true;
+      body.push(MOVE, MOVE, MOVE, CARRY, WORK, WORK, WORK, WORK, WORK);
+      var num_interations = (energy_available - 900)/250;
       for(i = 0; (i < (num_interations-1)) || (i==2); i++) {
         body.push(WORK, WORK, MOVE);
       }
     }
     else {
-      if(energy_available < 850) return true;
-      body.push(MOVE, MOVE, MOVE, MOVE, MOVE, WORK, WORK, WORK, WORK);
-      var num_interations = (energy_available - 850)/150;
-      for(i = 0; (i < (num_interations-1)) || (i==2); i++) {
+      if(energy_available < 900) return true;
+      body.push(MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, WORK, WORK, WORK, WORK);
+      var num_interations = (energy_available - 900)/150;
+      for(i = 0; (i < (num_interations-1)) || (i==4); i++) {
         body.push(WORK, MOVE);
       }
     }
@@ -61,7 +61,7 @@ module.exports = {
 
     if (Memory.room_profile[room_index].room_action == 'base') {
       var num_interations = (energy_available - 200)/150;
-      for(i = 0; (i < (num_interations-1)) || (i==10); i++) {
+      for(i = 0; (i < (num_interations-1)) || (i==7); i++) {
         body.push(CARRY, CARRY, MOVE);
       }
     }
@@ -69,15 +69,15 @@ module.exports = {
       if(energy_available < 500) return true;
       body.push(MOVE, CARRY, CARRY, MOVE, CARRY, CARRY);
       var num_interations = (energy_available - 500)/150;
-      for(i = 0; (i < (num_interations-1)) || (i==17); i++) {
+      for(i = 0; (i < (num_interations-1)) || (i==5); i++) {
         body.push(CARRY, CARRY, MOVE);
       }
     }
     else {
       if(energy_available < 550) return true;
       body.push(MOVE, CARRY, MOVE, CARRY, MOVE, CARRY, MOVE);
-      var num_interations = (energy_available - 550)/150;
-      for(i = 0; (i < (num_interations-1)) || (i==2); i++) {
+      var num_interations = (energy_available - 550)/100;
+      for(i = 0; (i < (num_interations-1)) || (i==5); i++) {
         body.push(CARRY, MOVE);
       }
     }

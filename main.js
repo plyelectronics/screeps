@@ -49,6 +49,9 @@ module.exports.loop = function () {
         else if(creep.memory.role == 'repair_bot') {
             roleRepair_Bot.run(creep);
         }
+        else if(creep.memory.role == 'ranged_defense') {
+            roleRanged.run(creep);
+        }
     }
 
     var cpu_used = Game.cpu.getUsed();

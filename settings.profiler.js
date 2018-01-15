@@ -20,8 +20,11 @@ module.exports = {
             'room_level': room.controller.level,
             'room_purpose' : Memory.base_profile ? (Memory.base_profile[base_num].base_id == room.name ? 'base' : 'default') : 'default',
             'room_home_base' : base_num,
-            'room_action' : Memory.base_profile ? (Memory.base_profile[base_num].base_id == room.name ? 'base' : 'default') : 'default'
-            'room_hostiles' : (HostileCreeps.length > 0) ? true : false;
+            'room_action' : Memory.base_profile ? (Memory.base_profile[base_num].base_id == room.name ? 'base' : 'default') : 'default',
+            'room_hostiles' : (HostileCreeps.length > 0) ? true : false,
+            'room_hostiles_array' : [],
+            'room_healing' : false,
+            'room_healing_array' : []
         }
 
         for(j in energy_sources) {
