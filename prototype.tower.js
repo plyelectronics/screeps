@@ -36,7 +36,14 @@ StructureTower.prototype.defend = function () {
                 else {
                     var towers = this.room.find(
                         FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-                    towers.forEach(tower => tower.repair(repair_id_object));
+                    if(this.room.storage.store[RESOURCE_ENERGY] > (this.room.storage.storeCapacity * .50))
+                    {
+                        towers.forEach(tower => tower.repair(repair_id_object));
+                    }
+                    else
+                    {
+                        towers[0].repair(repair_id_object);
+                    }
                 }
             }
             else {
@@ -54,7 +61,14 @@ StructureTower.prototype.defend = function () {
             if(repair_needy.length > 0){
                 var towers = this.room.find(
                     FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-                towers.forEach(tower => tower.repair(repair_needy[0]));
+                if(this.room.storage.store[RESOURCE_ENERGY] > (this.room.storage.storeCapacity * .50))
+                {
+                    towers.forEach(tower => tower.repair(repair_needy[0]));
+                }
+                else
+                {
+                    towers[0].repair(repair_needy[0]);
+                }
                 Memory.repairID = repair_needy[0].id;
                 Memory.repairContinue = true;
             }
@@ -69,11 +83,18 @@ StructureTower.prototype.defend = function () {
                     console.log('very low rampart...');
                     var towers = this.room.find(
                         FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-                    towers.forEach(tower => tower.repair(repair_wall_low[0]));
+                    if(this.room.storage.store[RESOURCE_ENERGY] > (this.room.storage.storeCapacity * .50))
+                    {
+                        towers.forEach(tower => tower.repair(repair_wall_low[0]));
+                    }
+                    else
+                    {
+                        towers[0].repair(repair_wall_low[0]);
+                    }
                 }
                 else {
                     var repair_wall = this.room.find(FIND_STRUCTURES, {
-                        filter: (s) => (s.hits <= (s.hitsMax * 0.01)) &&
+                        filter: (s) => (s.hits <= (s.hitsMax * 0.05)) &&
                         ((s.structureType == STRUCTURE_WALL) ||
                         (s.structureType == STRUCTURE_RAMPART))
                     });
@@ -81,7 +102,14 @@ StructureTower.prototype.defend = function () {
                     if(repair_wall.length > 0){
                         var towers = this.room.find(
                             FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-                        towers.forEach(tower => tower.repair(repair_wall[0]));
+                        if(this.room.storage.store[RESOURCE_ENERGY] > (this.room.storage.storeCapacity * .50))
+                        {
+                            towers.forEach(tower => tower.repair(repair_wall[0]));
+                        }
+                        else
+                        {
+                            towers[0].repair(repair_wall[0]);
+                        }
                     }
                 }
             }

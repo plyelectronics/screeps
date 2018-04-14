@@ -1,16 +1,52 @@
 module.exports = {
   //Game.rooms['E84S27'] is expected to be the function input
-  room_profile(room, base_num) {
+  room_profile(creep, room, base_num) {
     if (room != undefined) {
       var valid_room = Memory.room_profile ? Memory.room_profile.filter(function(find_room){return find_room.room_id == room.name}) : undefined;
-      if(valid_room != undefined) {
-        //console.log('Room already saved: ' + valid_room[0].room_id);
+      if(valid_room.length > 0) {
+        console.log('Room already saved: ' + valid_room[0].room_id);
       }
       else {
 
         var energy_sources = room.find(FIND_SOURCES);
         var mineral_sources = room.find(FIND_MINERALS);
-        var HostileCreeps = creep.pos.find(FIND_HOSTILE_CREEPS);
+        var HostileCreeps = room.find(FIND_HOSTILE_CREEPS, {
+          filter:function(enemy){enemy.owner.username !== 'Source Keeper'}
+        });
+        var SourceKeeperCreeps = room.find(FIND_HOSTILE_CREEPS, {
+          filter:function(enemy){enemy.owner.username === 'Source Keeper'}
+        });
+
+        var room_purpose = 'default';
+        // If controller level then save base
+        if((room.controller.level > 0) && (room.controller.owner ? (room.controller.owner.username === creep.owner.username) : false))
+          room_purpose = 'base';
+        // If controller level then save enemy_base
+        else if((room.controller.level > 0) && (room.controller.owner ? (room.controller.owner.username !== creep.owner.username) : false))
+          room_purpose = 'enemy_base';
+        // If controller reservation active then save enemy_expansion
+        else if((room.controller.reservation ? (room.controller.reservation.username === creep.owner.username) : false))
+          room_purpose = 'base_remote_mining';
+        // If controller reservation active then save enemy_expansion
+        else if((room.controller.reservation ? (room.controller.reservation.username !== creep.owner.username) : false))
+          room_purpose = 'enemy_remote_mining';
+        // If hostiles are source keepers then save source_keeper_room
+        else if(SourceKeeperCreeps.length > 0)
+          room_purpose = 'source_keeper';
+        // If hostiles but not source keepers then save contested_room
+        else if((SourceKeeperCreeps.length === 0) && (HostileCreeps.length > 0))
+          room_purpose = 'contested_room';
+        // If energy and or minerals then save resource_room
+        else if((energy_sources.length > 0) || (mineral_sources.length > 0))
+          room_purpose = 'resource_room';
+
+        var room_action = 'default'
+        if((room.controller.level > 0) && (room.controller.owner ? (room.controller.owner.username === creep.owner.username) : false))
+          room_action = 'base';
+        else if(SourceKeeperCreeps.length > 0)
+          room_action = 'source_keeper';
+        else if((HostileCreeps.length == 0) && ((energy_sources.length > 0) || (mineral_sources.length > 0)))
+          room_action = 'potential_resource_expansion';
 
         var room_survey = {
             'room_id' : room.name,
@@ -18,9 +54,9 @@ module.exports = {
             'room_mineral' : [],
             'room_owner': room.controller.owner,
             'room_level': room.controller.level,
-            'room_purpose' : Memory.base_profile ? (Memory.base_profile[base_num].base_id == room.name ? 'base' : 'default') : 'default',
+            'room_purpose' : room_purpose,
             'room_home_base' : base_num,
-            'room_action' : Memory.base_profile ? (Memory.base_profile[base_num].base_id == room.name ? 'base' : 'default') : 'default',
+            'room_action' : room_action,
             'room_hostiles' : (HostileCreeps.length > 0) ? true : false,
             'room_hostiles_array' : [],
             'room_healing' : false,

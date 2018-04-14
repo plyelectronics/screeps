@@ -92,9 +92,6 @@ var roleHarvester = {
                 if(storage_target!=undefined){
                     var resource_report = transfer_resource(creep, storage_target);
                     if(resource_report == ERR_NOT_IN_RANGE) {
-                        creep.moveTo(container);
-                    }
-                    if(resource_report == ERR_NOT_IN_RANGE) {
                         creep.moveTo(storage_target);
                     }
                 }

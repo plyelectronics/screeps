@@ -98,20 +98,20 @@ function moveTo_w_road_fix (creep, target) {
   if(creep.carry.energy > 0) {
     var const_road = creep.pos.lookFor(LOOK_CONSTRUCTION_SITES);
     var target_road = creep.pos.lookFor(LOOK_STRUCTURES);
-    if(const_road.length > 0) {
+    if((const_road.length > 0)) {
       creep.build(const_road[0]);
       return;
     }
-    else if((target_road.length > 0 ?
+    else if(((target_road.length > 0) && (creep.room.energyAvailable > (creep.room.energyCapacityAvailable * .75))) ?
       ((target_road[0].structureType == STRUCTURE_ROAD) && (target_road[0].hits < (target_road[0].hitsMax * .40))) :
       false)
-    ) {
+    {
 
       creep.memory.repair_road_flag = true;
       creep.memory.repair_road_id = target_road[0].id;
       return;
     }
-    else if((target_road.length == 0) && (const_road.length == 0)) {
+    else if((target_road.length == 0) && (const_road.length == 0) && (creep.pos.x != 0) && (creep.pos.x != 49) && (creep.pos.y != 0) & (creep.pos.y != 49)) {
       creep.pos.createConstructionSite(STRUCTURE_ROAD);
       return;
     }
@@ -129,6 +129,12 @@ module.exports = {
     var room_index = Memory.room_profile.findIndex(function(find_room){return find_room.room_id == creep.memory.assigned_room});
     var energy_index = Memory.room_profile[room_index].room_energy.findIndex(function(find_energy){return find_energy.energy_id == creep.memory.resource_id});
     var source = Game.getObjectById(creep.memory.resource_id);
+
+    if(source == undefined) {
+      var targetPos = new RoomPosition(25, 25, creep.memory.assigned_room);
+      creep.moveTo(targetPos);
+      return;
+    }
 
     //Setup
     if(!creep.memory.setup) {
@@ -184,7 +190,7 @@ module.exports = {
     }
 
     //If Storing....
-    if(creep.memory.repair_road_flag) {
+    if(creep.memory.repair_road_flag == true) {
       var road_to_fix = Game.getObjectById(creep.memory.repair_road_id);
       if(road_to_fix != undefined) {
         creep.repair(road_to_fix);
@@ -209,12 +215,13 @@ module.exports = {
         return;
       }
       else if(creep.room.energyAvailable < (creep.room.energyCapacityAvailable * .95)) {
+
         let extension = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-          filter: s => ((s.structureType == STRUCTURE_EXTENSION) && (s.energy != 50))
+          filter: s => ((s.structureType == STRUCTURE_EXTENSION) && (s.energy < s.energyCapacity))
         });
         if(extension) {
           if(transfer_resource(creep, extension) == ERR_NOT_IN_RANGE) {
-              moveTo_w_road_fix(creep, extension);
+            moveTo_w_road_fix(creep, extension);
           }
           return;
         }
@@ -296,5 +303,6 @@ module.exports = {
         }
       }
     }
+
   }
 }

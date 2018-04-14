@@ -40,7 +40,7 @@ function attack_enemy(creep) {
 
 module.exports = {
   run(creep) {
-    if(creep.room.name == Memory.attackRoomID_1){
+    if(creep.room.name == creep.memory.target_room){
       var room_index = Memory.room_profile.findIndex(function(find_room){return find_room.room_id === creep.room.name});
 
       if(room_index != undefined) {
@@ -83,7 +83,7 @@ module.exports = {
       }
     }
   	else {
-	    var targetPos = new RoomPosition(25, 25, Memory.attackRoomID_1);
+	    var targetPos = new RoomPosition(25, 25, creep.memory.target_room);
       var result = creep.moveTo(targetPos);
   	}
   }
