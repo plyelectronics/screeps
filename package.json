@@ -1,0 +1,26 @@
+{
+  "name": "screeps",
+  "version": "1.0.0",
+  "description": "Screeps Public Realm Project",
+  "main": "main.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/plyelectronics/screeps.git"
+  },
+  "keywords": [
+    "screeps"
+  ],
+  "author": "Logan Myers",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/plyelectronics/screeps/issues"
+  },
+  "homepage": "https://github.com/plyelectronics/screeps#readme",
+  "devDependencies": {
+    "grunt": "^1.0.2",
+    "grunt-screeps": "^1.4.0"
+  }
+}
