@@ -85,8 +85,26 @@ module.exports.loop = function () {
     }
 
     var cpu_used = Game.cpu.getUsed();
-    if(true) {
-        console.log('USED CPU: ' + Game.cpu.getUsed());
-        console.log('BUCKET CPU: ' + Game.cpu.bucket);
+    console.log('USED CPU Before Market: ' + cpu_used);
+
+    if(cpu_used < 8)
+    {
+        let buyOrders = Game.market.getAllOrders({resourceType: RESOURCE_ENERGY, type: ORDER_BUY});
+        _.sortBy(buyOrders, ['price']);
+        let myRooms = _.filter(Game.rooms, r => r.controller && r.controller.my);
+        _.forEach(myRooms, function(room) {
+            let terminal = room.terminal;
+            if(terminal && !terminal.cooldown && (terminal.store.energy > (terminal.storeCapacity * .8))) {
+                Game.market.deal(buyOrders[0].id, terminal.store.energy / 2, room.name)
+            }
+        })
+
+        console.log('USED CPU After Market: ' + Game.cpu.getUsed());
     }
+    else
+    {
+        console.log('Skipping Market');
+    }
+
+    console.log('BUCKET CPU: ' + Game.cpu.bucket);
 }

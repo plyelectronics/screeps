@@ -20,7 +20,7 @@ module.exports = {
           Memory.room_profile[room_index].room_energy[energy_index].energy_container_id = container[0].id;
         }
         else {
-          if((container.length == 0) && (Memory.room_profile[room_index].room_level > 1)) {
+          if((container.length == 0)) {
             var container_construction = source.pos.findInRange(FIND_CONSTRUCTION_SITES, 1, {
                 filter: s => s.structureType == STRUCTURE_CONTAINER
             });

@@ -5,12 +5,34 @@ var roleRepair_Bot = {
   run: function(creep) {
     var room_index = Memory.room_profile.findIndex(function(find_room){return find_room.room_id === creep.room.name});
 
+    var carried_resource = _.findKey(creep.carry);
+    if((carried_resource !== undefined) ? carried_resource !== RESOURCE_ENERGY : false)
+    {
+        if(creep.transfer(creep.room.storage, carried_resource) == ERR_NOT_IN_RANGE)
+        {
+            creep.moveTo(creep.room.storage);
+        }
+        return;
+    }
+
     if(creep.memory.fixing && _.sum(creep.carry) == 0) {
           creep.memory.fixing = false;
           creep.memory.run_harvest = false;
     }
     if(!creep.memory.fixing && (_.sum(creep.carry) == creep.carryCapacity)) {
         creep.memory.fixing = true;
+
+        // Evaluating if there is enough energy to warrent filling up the terminal to sell on the marketplace
+        if(creep.room.terminal){
+            if(creep.room.storage.store[RESOURCE_ENERGY] < (creep.room.storage.storeCapacity * .50))
+            {
+                creep.memory.fill_terminal = false;
+            }
+            else if(creep.room.storage.store[RESOURCE_ENERGY] > (creep.room.storage.storeCapacity * .80))
+            {
+                creep.memory.fill_terminal = true;
+            }
+        }
     }
 
     if(creep.memory.run_harvest) {
@@ -45,6 +67,13 @@ var roleRepair_Bot = {
                 if(creep.build(other_targets[0]) == ERR_NOT_IN_RANGE) {
                     creep.moveTo(other_targets[0], {visualizePathStyle: {stroke: '#ffffff'}});
                 }
+            }
+            else if(creep.memory.fill_terminal)
+            {
+              if(creep.transfer(creep.room.terminal, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE)
+              {
+                creep.moveTo(creep.room.terminal, {visualizePathStyle: {stroke: '#ffff00'}});
+              }
             }
             else {
               roleUpgrader.run(creep);
@@ -88,15 +117,11 @@ var roleRepair_Bot = {
            return;
         }
         else {
-          let storage_cont = creep.pos.findClosestByRange(FIND_STRUCTURES, {
-              filter: s => s.structureType == STRUCTURE_STORAGE && s.store[RESOURCE_ENERGY] > 0
-          });
-          if(storage_cont){
-              if(storage_cont!=undefined){
-                  if(creep.withdraw(storage_cont, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
-                      creep.moveTo(storage_cont);
-                  }
-              }
+          if(creep.room.storage ? (creep.room.storage.store[RESOURCE_ENERGY] > 0) : false)
+          {
+            if(creep.withdraw(creep.room.storage, RESOURCE_ENERGY) == ERR_NOT_IN_RANGE) {
+              creep.moveTo(creep.room.storage);
+            }
           }
           else {
               let container = creep.pos.findClosestByRange(FIND_STRUCTURES, {

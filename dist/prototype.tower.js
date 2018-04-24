@@ -36,7 +36,7 @@ StructureTower.prototype.defend = function () {
                 else {
                     var towers = this.room.find(
                         FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-                    if(this.room.storage.store[RESOURCE_ENERGY] > (this.room.storage.storeCapacity * .50))
+                    if(this.room.storage.store[RESOURCE_ENERGY] > (this.room.storage.storeCapacity * .90))
                     {
                         towers.forEach(tower => tower.repair(repair_id_object));
                     }
@@ -61,7 +61,7 @@ StructureTower.prototype.defend = function () {
             if(repair_needy.length > 0){
                 var towers = this.room.find(
                     FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-                if(this.room.storage.store[RESOURCE_ENERGY] > (this.room.storage.storeCapacity * .50))
+                if(this.room.storage.store[RESOURCE_ENERGY] > (this.room.storage.storeCapacity * .90))
                 {
                     towers.forEach(tower => tower.repair(repair_needy[0]));
                 }
@@ -83,7 +83,7 @@ StructureTower.prototype.defend = function () {
                     console.log('very low rampart...');
                     var towers = this.room.find(
                         FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-                    if(this.room.storage.store[RESOURCE_ENERGY] > (this.room.storage.storeCapacity * .50))
+                    if(this.room.storage.store[RESOURCE_ENERGY] > (this.room.storage.storeCapacity * .90))
                     {
                         towers.forEach(tower => tower.repair(repair_wall_low[0]));
                     }
@@ -102,7 +102,7 @@ StructureTower.prototype.defend = function () {
                     if(repair_wall.length > 0){
                         var towers = this.room.find(
                             FIND_MY_STRUCTURES, {filter: {structureType: STRUCTURE_TOWER}});
-                        if(this.room.storage.store[RESOURCE_ENERGY] > (this.room.storage.storeCapacity * .50))
+                        if(this.room.storage.store[RESOURCE_ENERGY] > (this.room.storage.storeCapacity * .90))
                         {
                             towers.forEach(tower => tower.repair(repair_wall[0]));
                         }

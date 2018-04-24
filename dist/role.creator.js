@@ -11,26 +11,28 @@ module.exports = {
 
     if (Memory.room_profile[room_index].room_action == 'base') {
       var num_interations = (energy_available - 200)/100;
-      for(i = 0; (i < (num_interations-1)) || (i==9); i++) {
+      for(i = 0; (i < (num_interations-1)) && (i<7); i++) {
         body.push(WORK);
       }
     }
     else if (Memory.room_profile[room_index].room_energy[energy_index].energy_road) {
-      if(energy_available < 900) return true;
+      if(energy_available < 950) return true;
       body.push(MOVE, MOVE, MOVE, CARRY, WORK, WORK, WORK, WORK, WORK);
-      var num_interations = (energy_available - 900)/250;
-      for(i = 0; (i < (num_interations-1)) || (i==2); i++) {
+      var num_interations = (energy_available - 950)/250;
+      for(i = 0; (i < (num_interations-1)) && (i<4); i++) {
         body.push(WORK, WORK, MOVE);
       }
     }
     else {
-      if(energy_available < 900) return true;
+      if(energy_available < 950) return true;
       body.push(MOVE, MOVE, MOVE, MOVE, MOVE, CARRY, WORK, WORK, WORK, WORK);
-      var num_interations = (energy_available - 900)/150;
-      for(i = 0; (i < (num_interations-1)) || (i==4); i++) {
+      var num_interations = (energy_available - 950)/150;
+      for(i = 0; (i < (num_interations-1)) && (i<4); i++) {
         body.push(WORK, MOVE);
       }
     }
+
+    console.log('base_index is: ' + base_index);
 
     var creep_name = 'energy_miner';
     var creeps_in_base = _.filter(Game.creeps, (creep) => creep.memory.base_room == Memory.base_profile[base_index].base_id);
@@ -39,14 +41,17 @@ module.exports = {
       creep_name = 'harvester';
     }
 
-    if(spawn.spawnCreep(body, newName,
+    var report = spawn.spawnCreep(body, newName,
         {memory: {
           role: creep_name,
           assigned_room: Memory.room_profile[room_index].room_id,
           resource_id: Memory.room_profile[room_index].room_energy[energy_index].energy_id,
           base_room: Memory.base_profile[base_index].base_id,
           setup: false
-        }}) == OK) {
+        }});
+    console.log('Building Miner Report : ' + report);
+    console.log(body);
+    if(report == OK) {
           return false;
     }
     else {
@@ -61,15 +66,15 @@ module.exports = {
 
     if (Memory.room_profile[room_index].room_action == 'base') {
       var num_interations = (energy_available - 200)/150;
-      for(i = 0; (i < (num_interations-1)) || (i==7); i++) {
+      for(i = 0; (i < (num_interations-1)) && (i<5); i++) {
         body.push(CARRY, CARRY, MOVE);
       }
     }
-    else if (Memory.room_profile[room_index].room_energy[energy_index].energy_road) {
+    else if (!Memory.room_profile[room_index].room_energy[energy_index].energy_road) {
       if(energy_available < 500) return true;
       body.push(MOVE, CARRY, CARRY, MOVE, CARRY, CARRY);
       var num_interations = (energy_available - 500)/150;
-      for(i = 0; (i < (num_interations-1)) || (i==5); i++) {
+      for(i = 0; (i < (num_interations-1)) && (i<10); i++) {
         body.push(CARRY, CARRY, MOVE);
       }
     }
@@ -77,7 +82,7 @@ module.exports = {
       if(energy_available < 550) return true;
       body.push(MOVE, CARRY, MOVE, CARRY, MOVE, CARRY, MOVE);
       var num_interations = (energy_available - 550)/100;
-      for(i = 0; (i < (num_interations-1)) || (i==5); i++) {
+      for(i = 0; (i < (num_interations-1)) && (i<12); i++) {
         body.push(CARRY, MOVE);
       }
     }

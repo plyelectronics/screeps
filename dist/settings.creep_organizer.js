@@ -143,23 +143,25 @@ module.exports = {
               var room_defense_healing = _.filter(Game.creeps, (creep) => creep.memory.role == 'healing_room_defense');
 
 
-              if(upgraders.length < 2) {
+              if(upgraders.length < 1) {
                 var active_spawn = Game.getObjectById(available_spawns[num_scheduled++].spawn_id);
                 var newName = 'Upgrader' + Game.time;
                 console.log('Spawning new upgrader: ' + newName);
-                if (upgraders.length < 1) active_spawn.spawnCreep([WORK,CARRY,MOVE], newName,
-                    {memory: {role: 'upgrader'}});
-                else active_spawn.spawnCreep([CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,WORK,MOVE], newName,
+                //if (upgraders.length < 1) active_spawn.spawnCreep([WORK,CARRY,MOVE], newName,
+                //    {memory: {role: 'upgrader'}});
+                //else
+                active_spawn.spawnCreep([CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,WORK,MOVE], newName,
                     {memory: {role: 'upgrader'}});
                 if(num_scheduled >= available_spawns.length) return;
               }
-              else if(repair_bots.length < 2) {
+              else if(repair_bots.length < 1) {
                 var active_spawn = Game.getObjectById(available_spawns[num_scheduled++].spawn_id);
                 var newName = 'Repair_Bot' + Game.time;
                 console.log('Spawning new repair_bot: ' + newName);
-                if(repair_bots.length < 1) active_spawn.spawnCreep([WORK,CARRY,MOVE], newName,
-                    {memory: {role: 'repair_bot'}});
-                else active_spawn.spawnCreep([WORK,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,CARRY,MOVE], newName,
+                //if(repair_bots.length < 1) active_spawn.spawnCreep([WORK,CARRY,MOVE], newName,
+                //    {memory: {role: 'repair_bot'}});
+                //else
+                active_spawn.spawnCreep([WORK,CARRY,MOVE,CARRY,CARRY,MOVE,WORK,CARRY,MOVE,CARRY,CARRY,MOVE,CARRY,CARRY,MOVE], newName,
                     {memory: {role: 'repair_bot'}});
                 if(num_scheduled >= available_spawns.length) return;
               }
@@ -175,7 +177,7 @@ module.exports = {
             if((room_memory[j].room_purpose === 'base') || (room_memory[j].room_purpose === 'base_remote_mining')) {
 
               var room_defense_ranged = _.filter(Game.creeps, (creep) => (creep.memory.role == 'ranged_defense') && (creep.memory.target_room === room_memory[j].room_id));
-              if(room_defense_ranged.length < 2) {
+              if(room_defense_ranged.length < 1) {
                 var active_spawn = Game.getObjectById(available_spawns[num_scheduled++].spawn_id);
                 var newName = 'Ranged_Defense' + Game.time;
                 console.log('Spawning new Ranged Defense: ' + newName);
