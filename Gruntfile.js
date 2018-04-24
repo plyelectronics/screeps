@@ -7,12 +7,12 @@ module.exports = function(grunt) {
             options: {
                 email: 'ply.electronics@gmail.com',
                 password: 'screeps15!',
-                branch: 'CScreepsPublic',
+                //branch: 'CActivePub',
+		branch: 'testbranch',
                 ptr: false
             },
             dist: {
-                src: ['dist/*.js']
-		//src: ['/home/logan/git-files/screeps/*.js']
+                src: ['dist/*']
             }
         }
     });
