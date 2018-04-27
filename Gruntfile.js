@@ -7,7 +7,7 @@ module.exports = function(grunt) {
             options: {
                 email: 'ply.electronics@gmail.com',
                 password: 'screeps15!',
-                branch: 'CScreepsPublic',
+                branch: 'dev_java',
                 ptr: false
             },
             dist: {
